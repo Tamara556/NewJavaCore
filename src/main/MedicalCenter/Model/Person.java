@@ -1,4 +1,4 @@
-package homeworks.medicalcenter.model;
+package main.MedicalCenter.Model;
 
 public class Person {
 

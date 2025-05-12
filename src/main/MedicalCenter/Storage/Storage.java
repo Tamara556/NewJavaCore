@@ -1,114 +1,144 @@
 package main.MedicalCenter.Storage;
 
 import main.MedicalCenter.Model.Doctor;
-import main.MedicalCenter.Model.Patient;
+import main.MedicalCenter.Model.Pacient;
 import main.MedicalCenter.Model.Person;
 import main.MedicalCenter.Model.Profession;
+import main.MedicalCenter.util.DateUtil;
 
-public class MedicalCenterStorage {
+import java.util.Date;
 
-    public Person[] persons = new Person[10];
-    int size = 0;
+public class Storage {
 
-    public int getSize() {
-        return size;
-    }
+    private Person[] storage = new Person[10];
+    private int size = 0;
 
-    public void extend(){
-        Person[] newArr = new Person[persons.length + 10];
-        System.arraycopy(persons, 0, newArr, 0, persons.length);
-        persons = newArr;
-    }
+    public int getSize() { return size; }
 
-    public void addPerson(Person person){
-        if (size == persons.length){
+    public void addPerson(Person person) {
+        if (size == storage.length) {
             extend();
         }
-        persons[size++] = person;
+        storage[size++] = person;
     }
 
-    public void PrintAllDoctors(){
+    public void printDoctors() {
         for (int i = 0; i < size; i++) {
-            Person person = persons[i];
-            if (person instanceof Doctor){
+            Person person = storage[i];
+            if (person instanceof Doctor) {
                 System.out.println(person);
             }
         }
     }
 
-    public void PrintAllPatients(){
+    public Doctor searchDoctorByProfession(Profession profession) {
         for (int i = 0; i < size; i++) {
-            Person person = persons[1];
-            if (person instanceof Patient){
-                System.out.println(person);
-            }
-        }
-    }
-
-    public Doctor searchDoctorByProfession(Profession profession){
-        for (int i = 0; i < size; i++) {
-            Person person = persons[i];
-            if (persons[i] instanceof Doctor){
-                Doctor doctor = new Doctor();
-                if (doctor.getProfession().equals(profession)){
+            Person person = storage[i];
+            if (storage[i] instanceof Doctor) {
+                Doctor doctor = (Doctor) person;
+                if (doctor.getProfession().equals(profession)) {
                     return doctor;
                 }
             }
-
         }
         return null;
     }
 
-    public void searchDoctorById(String id){
+    public void deleteDoctorById(String delId) {
         boolean found = false;
         for (int i = 0; i < size; i++) {
-            Person doctor = persons[i];
-            if (doctor.getId().equals(id) && doctor instanceof Doctor){
+            Person doctor = storage[i];
+            if (doctor.getId().equals(delId) && doctor instanceof Doctor) {
                 deleteByIndex(i);
-                System.out.println("Doctor has been deleted");
+                System.out.println("Doctor deleted!");
                 found = true;
             }
         }
-
-        if (!found){
-            System.out.println("Doctor with " + id  + " not found");
+        if(!found) {
+            System.out.println("Doctor with id " + delId + " not found");
         }
-
     }
 
-    public void getDoctorById(String id){
+    public boolean idChecker(String changeId) {
         for (int i = 0; i < size; i++) {
-            Person doctor = persons[i];
-            if (doctor.getId().equals(id) && doctor instanceof Doctor){
-                System.out.println(doctor);
-            } else {
-                System.out.println("Doctor with " + id + " not found");
+            Person doctor = storage[i];
+            if (doctor.getId().equals(changeId)) {
+                return false;
             }
         }
+        return true;
     }
 
-    public void printPatientsByDoctor(Doctor doctor){
+    public Doctor getDoctorById(String id) {
+        for (int i = 0; i < size; i++) {
+            Person person = storage[i];
+            if (person.getId().equals(id) && person instanceof Doctor) {
+                return (Doctor) person;
+            }
+        }
+        return null;
+    }
+
+    public boolean dateChecker(Date date) {
+        for (int i = 0; i < size; i++) {
+            Person person = storage[i];
+            if (storage[i] instanceof Pacient) {
+                Pacient patient = (Pacient) person;
+                if (patient.getDateOfReg().equals(date)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void printAllPatientsByDoctor(Doctor doctor) {
         boolean found = false;
         for (int i = 0; i < size; i++) {
-            Person person = persons[i];
-            if (person instanceof Patient){
-                Patient patient = (Patient) person;
-                if (patient.getDoctor().equals(doctor)){
+            Person person = storage[i];
+            if (person instanceof Pacient) {
+                Pacient patient = (Pacient) person;
+                if (patient.getDoctor().equals(doctor)) {
                     System.out.println(patient);
                     found = true;
                 }
             }
-            if (!found){
-                System.out.println("This doctor has no patients");
-            }
+        }
+        if (!found) {
+            System.out.println("This doctor has no patients");
         }
     }
 
-    private void deleteByIndex(int i) {
-        for (int j = 0; j < persons.length; j++) {
-            persons[j] = persons[j + 1];
+
+    public void printTodaysPatients() {
+        boolean found = false;
+        Date date = new Date();
+        for (int i = 0; i < size; i++) {
+            Person person = storage[i];
+            if (storage[i] instanceof Pacient) {
+                Pacient patient = (Pacient) person;
+                if (DateUtil.areTheDatesTheSame(date, patient.getDateOfReg())) {
+                    System.out.println(patient);
+                    found = true;
+                }
+            }
         }
-        size --;
+        if (!found) {
+            System.out.println("No patients today!");
+        }
+    }
+
+    private void extend() {
+        Person[] newArr = new Person[storage.length + 10];
+        System.arraycopy(storage, 0, newArr, 0, storage.length);
+        storage = newArr;
+    }
+
+    private void deleteByIndex(int i) {
+        for (int j = i; j < size; j++) {
+            storage[j] = storage[j+1];
+        }
+        size--;
     }
 
 }
