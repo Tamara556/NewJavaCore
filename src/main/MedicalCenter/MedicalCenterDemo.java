@@ -53,6 +53,7 @@ public class MedicalCenterDemo {
                     } else {
                         searchDoctorByProfession();
                     }
+                    break;
 
                 case DELETE_DOCTOR_BY_ID:
                     if (storage.getSize() == 0) {
