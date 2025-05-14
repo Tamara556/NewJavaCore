@@ -17,7 +17,7 @@ public class BookStorageDemo {
     static final private BookStorage bookStorage = new BookStorage();
     static final private Gender[] values = Gender.values();
 
-    private static boolean isDataEmpty(String data){
+    private static boolean isDataEmpty(String data) {
         return data.equals("");
     }
 
@@ -26,7 +26,7 @@ public class BookStorageDemo {
         while (isRun) {
             Commands.printCommands();
             String command = scanner.nextLine();
-            switch (command){
+            switch (command) {
                 case EXIT:
                     isRun = false;
                     break;
@@ -40,23 +40,23 @@ public class BookStorageDemo {
                     break;
 
                 case SEARCH_AUTHOR_BY_ID:
-                    if (authorStorage.getSize() == 0){
+                    if (authorStorage.getSize() == 0) {
                         System.out.println("there is no author");
                     } else {
                         searchAuthorById();
                     }
                     break;
 
-              // case SEARCH_BOOK_BY_AUTHOR:
-              //     if (bookStorage.getBookSize() == 0){
-              //         System.out.println("there is no book");
-              //     } else {
-              //         searchBookByAuthor();
-              //     }
-              //     break;
+                // case SEARCH_BOOK_BY_AUTHOR:
+                //     if (bookStorage.getBookSize() == 0){
+                //         System.out.println("there is no book");
+                //     } else {
+                //         searchBookByAuthor();
+                //     }
+                //     break;
 
                 case DELETE_AUTHOR_BY_ID:
-                    if (authorStorage.getSize() == 0){
+                    if (authorStorage.getSize() == 0) {
                         System.out.println("there is no author");
                     } else {
                         authorStorage.printAuthors();
@@ -66,7 +66,7 @@ public class BookStorageDemo {
                     break;
 
                 case DELETE_BOOK_BY_ID:
-                    if (bookStorage.getBookSize() == 0){
+                    if (bookStorage.getBookSize() == 0) {
                         System.out.println("there is no book");
                     } else {
                         bookStorage.printBooks();
@@ -76,14 +76,14 @@ public class BookStorageDemo {
                     break;
 
                 case PRINT_ALL_BOOKS:
-                    if (bookStorage.getBookSize() == 0){
+                    if (bookStorage.getBookSize() == 0) {
                         System.out.println("there is no book bro");
                     } else {
                         bookStorage.printBooks();
                     }
 
                 case PRINT_ALL_AUTHORS:
-                    if (authorStorage.getSize() == 0){
+                    if (authorStorage.getSize() == 0) {
                         System.out.println("There is no author");
                     } else {
                         authorStorage.printAuthors();
@@ -94,22 +94,22 @@ public class BookStorageDemo {
         }
     }
 
-   // private static void searchBookByAuthor() {
-   //     authorStorage.printAuthors();
-   //     System.out.println("input author id");
-   //     String bookByAuthor = scanner.nextLine();
+    // private static void searchBookByAuthor() {
+    //     authorStorage.printAuthors();
+    //     System.out.println("input author id");
+    //     String bookByAuthor = scanner.nextLine();
 //
-   //     if (bookByAuthor.equals(authorStorage.getAuthorById(bookByAuthor))){
-   //         bookStorage.printBookById();
-   //     }
-   // }
+    //     if (bookByAuthor.equals(authorStorage.getAuthorById(bookByAuthor))){
+    //         bookStorage.printBookById();
+    //     }
+    // }
 
     private static void searchAuthorById() {
         authorStorage.printAuthors();
         System.out.println("input id ");
         String authorById = scanner.nextLine();
 
-        if (authorById == null ){
+        if (authorById == null) {
             System.out.println(authorById);
         } else {
             System.out.println("there's no author by id");
@@ -117,123 +117,110 @@ public class BookStorageDemo {
     }
 
     private static void addBook() {
-        if (authorStorage.getSize() >= 1){
-        System.out.println("input book id ");
-        String bookId = scanner.nextLine();
-        while (isDataEmpty(bookId) || !bookStorage.checkId(bookId)){
-            if (isDataEmpty(bookId)){
-                System.out.println("id can't be empty ");
-                System.out.print("please input id ");
-                bookId = scanner.nextLine();
-            }
-
-            if (bookStorage.checkId(bookId)){
-                System.out.println("book with " + bookId + " already exist");
-                System.out.print("input other id");
-                bookId = scanner.nextLine();
-            }
-
-            System.out.println("input title ");
-            String bookTitle = scanner.nextLine();
-            while (isDataEmpty(bookTitle)){
-                System.out.println("title can't be empty");
-                System.out.print("input other title");
-                bookTitle = scanner.nextLine();
-            }
-            authorStorage.printAuthors();
-            System.out.println("choose author for book ");
-            System.out.print("input id ");
-            String bookAuthorId = scanner.nextLine();
-            Author bookAuthor = authorStorage.getAuthorById(bookAuthorId);
-            while (isDataEmpty(bookAuthorId)){
-                System.out.println("book's author can't be empty ");
-                System.out.print("input author id");
-                authorStorage.printAuthors();
-                bookAuthorId = scanner.nextLine();
-                bookAuthor = authorStorage.getAuthorById(bookAuthorId);
-            }
-
-            System.out.println("input description ");
-            String bookDescription = scanner.nextLine();
-            while (isDataEmpty(bookDescription)){
-                System.out.print("description can be empty");
-            }
-
-            System.out.println("input book price");
-            String bookPrice = scanner.nextLine();
-            while (isDataEmpty(bookPrice)){
-                System.out.println("price can't be empty");
-                System.out.print("input price ");
-                bookPrice = scanner.nextLine();
-            }
-
-            System.out.println("input qty");
-            String bookQty = scanner.nextLine();
-            while (isDataEmpty(bookQty)){
-                System.out.println("input qty or else input 0");
-                bookQty = scanner.nextLine();
-            }
-
+        if (authorStorage.getSize() < 1) {
+            System.out.println("No authors available. Please add an author first.");
+            return;
         }
+
+        System.out.println("Input book ID:");
+        String bookId = scanner.nextLine().trim();
+
+        while (isDataEmpty(bookId) || !bookStorage.checkId(bookId)) {
+            if (isDataEmpty(bookId)) {
+                System.out.println("ID can't be empty. Please input ID:");
+            } else {
+                System.out.println("Book with ID " + bookId + " already exists. Input another ID:");
+            }
+            bookId = scanner.nextLine().trim();
+        }
+
+        System.out.println("Input title:");
+        String bookTitle = scanner.nextLine().trim();
+        while (isDataEmpty(bookTitle)) {
+            System.out.println("Title can't be empty. Please input title:");
+            bookTitle = scanner.nextLine().trim();
+        }
+
+        authorStorage.printAuthors();
+        System.out.println("Choose author by ID:");
+        String bookAuthorId = scanner.nextLine().trim();
+        Author bookAuthor = authorStorage.getAuthorById(bookAuthorId);
+
+        while (bookAuthor == null) {
+            System.out.println("Invalid author ID. Please try again:");
+            authorStorage.printAuthors();
+            bookAuthorId = scanner.nextLine().trim();
+            bookAuthor = authorStorage.getAuthorById(bookAuthorId);
+        }
+
+        System.out.println("Input description:");
+        String bookDescription = scanner.nextLine().trim();
+
+        System.out.println("Input book price:");
+        int bookPrice = Integer.parseInt(scanner.nextLine().trim());
+
+        System.out.println("Input quantity:");
+        int bookQty = Integer.parseInt(scanner.nextLine().trim());
+
+        Book newBook = new Book(bookId, bookTitle, bookAuthor.getName(), bookDescription, bookPrice, bookQty);
+        bookStorage.addBook(newBook);
+
+        System.out.println("Book successfully added:");
+        System.out.println(newBook);
     }
 
 
-
-        }
     private static void addAuthor() {
-        System.out.println("input id for author");
-        String authorId = scanner.nextLine();
-        while (isDataEmpty(authorId) || !authorStorage.idChecker(authorId)){
-            if (isDataEmpty(authorId)){
-                System.out.println("id can't be empty");
-                System.out.print("please input id ");
-                authorId = scanner.nextLine();
+        System.out.println("Input ID for the author:");
+        String authorId = scanner.nextLine().trim();
+
+        while (isDataEmpty(authorId) || !authorStorage.idChecker(authorId)) {
+            if (isDataEmpty(authorId)) {
+                System.out.println("ID can't be empty. Please input ID:");
+            } else {
+                System.out.println("Author with ID " + authorId + " already exists. Input another ID:");
             }
-            if (authorStorage.idChecker(authorId)){
-                System.out.println("author with" + authorId + "already exist");
-                System.out.println("input another id");
-                authorId = scanner.nextLine();
-            }
-        }
-        System.out.println("input name ");
-        String authorName = scanner.nextLine();
-        while (isDataEmpty(authorName)){
-            System.out.println("author name can't be empty");
-            System.out.print("input name");
-            authorName = scanner.nextLine();
+            authorId = scanner.nextLine().trim();
         }
 
-        System.out.println("input surname");
-        String authorSurname = scanner.nextLine();
-        while (isDataEmpty(authorSurname)){
-            System.out.println("Author surname can't be empty");
-            System.out.print("input surname ");
-            authorSurname = scanner.nextLine();
+        System.out.println("Input name:");
+        String authorName = scanner.nextLine().trim();
+        while (isDataEmpty(authorName)) {
+            System.out.println("Name can't be empty. Please input name:");
+            authorName = scanner.nextLine().trim();
         }
 
-        System.out.println("input author age");
-        String authorAge = scanner.nextLine();
-        while (isDataEmpty(authorAge)){
-            System.out.println("Author age can't be empty");
-            System.out.print("input author age bro");
-            authorAge = scanner.nextLine();
+        System.out.println("Input surname:");
+        String authorSurname = scanner.nextLine().trim();
+        while (isDataEmpty(authorSurname)) {
+            System.out.println("Surname can't be empty. Please input surname:");
+            authorSurname = scanner.nextLine().trim();
         }
 
-        System.out.println("input author gender");
-        for (Gender value : values) {
+        System.out.println("Input author age:");
+        String authorAge = scanner.nextLine().trim();
+        while (isDataEmpty(authorAge)) {
+            System.out.println("Age can't be empty. Please input age:");
+            authorAge = scanner.nextLine().trim();
+        }
+
+        System.out.println("Input author gender (Available options):");
+        for (Gender value : Gender.values()) {
             System.out.println(value);
         }
-        System.out.println("input gender");
-        String authorGender = scanner.nextLine();
 
-        Author newAuthor;
+        System.out.println("Input gender:");
+        String authorGender = scanner.nextLine().trim().toUpperCase();
 
         try {
-            newAuthor = new Author(authorId, authorName, authorSurname, authorAge, Gender.valueOf(authorGender));
+            Author newAuthor = new Author(authorId, authorName, authorSurname, authorAge, Gender.valueOf(authorGender));
+            authorStorage.addAuthor(newAuthor);
+            System.out.println("Author successfully added:");
+            System.out.println(newAuthor);
         } catch (IllegalArgumentException e) {
-            System.out.println("wrong gender");
-            return;
+            System.out.println("Invalid gender. Please try again.");
         }
+
     }
 
 
